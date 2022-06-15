@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import dayjs from "dayjs";
 import express, { response } from "express";
 
@@ -19,25 +20,21 @@ const server = express();
 
 server.get('/holidays', (request, response)=>{
 
-    response.setHeader('Content-Type', 'text/html');
-
-    response.write('Lista de feriados do ano: </br></br>');
-    holidays.map((holiday)=>(response.write((`Data: ${holiday.date} Nome: ${holiday.name} </br>`))));
-
-    response.end();
+    response.send(holidays);
 
 });
 
 server.get('/is-today-holiday', (request, response)=>{
     const today = dayjs().format('M/D/YYYY');
 
-    holidays.map(holiday => {if (today === holiday.date){
-        response.send(`Sim, hoje é ${holiday.name}`);
+    holidays.map(holiday => 
+        {if (today === holiday.date){
+            response.send(`Sim, hoje é ${holiday.name}`);
         }
     })
 
-    response.send(`Não, hoje não é feriado`)
+    response.send(`Não, hoje não é feriado`);
 })
 
-server.listen(3000);
+server.listen(3000, ()=>{console.log(chalk.green('Servidor no ar!'))});
 
